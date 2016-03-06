@@ -47,7 +47,17 @@
 
         <service
             android:name=".FetchAddressIntentService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".DogActivity"
+            android:label="@string/title_activity_dog"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.chickentinders.duber.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

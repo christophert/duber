@@ -17,9 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -28,6 +31,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.location.LocationListener;
@@ -90,9 +94,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         someButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "There are no drivers in your area", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(v.getContext(), "There are no drivers in your area", Toast.LENGTH_SHORT).show();
+                int PLACE_PICKER_REQUEST=1;
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+//                builder.setLatLngBounds(new LatLngBounds(new LatLng(42.823329, -78.066937), new LatLng(43.262418, -77.379604)));
+                try {
+                    startActivityForResult(builder.build(MainActivity.this), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
             }
         });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                if(((int) Math.floor(Math.random() * 100))%2 == 0) {
+                    Toast.makeText(this, "There are no drivers in your area", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "This service is only available in Kazakhstan", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     @Override
